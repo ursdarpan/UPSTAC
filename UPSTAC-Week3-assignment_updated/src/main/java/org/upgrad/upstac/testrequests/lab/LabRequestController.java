@@ -1,6 +1,5 @@
 package org.upgrad.upstac.testrequests.lab;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ import java.util.List;
 import static org.upgrad.upstac.exception.UpgradResponseStatusException.asBadRequest;
 import static org.upgrad.upstac.exception.UpgradResponseStatusException.asConstraintViolation;
 
-
 @RestController
 @RequestMapping("/api/labrequests")
 public class LabRequestController {
@@ -40,10 +38,8 @@ public class LabRequestController {
     @Autowired
     private TestRequestFlowService testRequestFlowService;
 
-
     @Autowired
     private UserLoggedInService userLoggedInService;
-
 
     @GetMapping("/to-be-tested")
     @PreAuthorize("hasAnyRole('TESTER')")
@@ -56,7 +52,6 @@ public class LabRequestController {
     public List<TestRequest> getForTester() {
 
         // Implement This Method
-
         // Create an object of User class and store the current logged in user first
         //Implement this method to return the list of test requests assigned to current tester(make use of the above created User object)
         //Make use of the findByTester() method from testRequestQueryService class
@@ -64,14 +59,12 @@ public class LabRequestController {
         //throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED,"Not implemented"); // replace this line with your code
         User tester = userLoggedInService.getLoggedInUser();
         return testRequestQueryService.findByTester(tester);
-
     }
 
 
     @PreAuthorize("hasAnyRole('TESTER')")
     @PutMapping("/assign/{id}")
     public TestRequest assignForLabTest(@PathVariable Long id) {
-
         User tester = userLoggedInService.getLoggedInUser();
         return testRequestUpdateService.assignForLabTest(id, tester);
     }
@@ -84,14 +77,10 @@ public class LabRequestController {
 
             User tester = userLoggedInService.getLoggedInUser();
             return testRequestUpdateService.updateLabTest(id, createLabResult, tester);
-
-
         } catch (ConstraintViolationException e) {
             throw asConstraintViolation(e);
         } catch (AppException e) {
             throw asBadRequest(e.getMessage());
         }
     }
-
-
 }
